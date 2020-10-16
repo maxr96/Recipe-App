@@ -30,6 +30,7 @@ export class AuthComponent{
         this.isLoading = true;
 
         if (this.isLoginMode) {
+            console.log(password);
             authObs = this.authService.login(email, password);
 
         } else {

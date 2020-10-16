@@ -8,8 +8,7 @@ import { AuthService } from "../auth/auth.service";
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
     private readonly SERVER_URL = '';
-    constructor(private http: HttpClient, private recipeService: RecipeService, 
-        private authService: AuthService){}
+    constructor(private http: HttpClient, private recipeService: RecipeService){}
 
     storeRecipes() {
         const recipes = this.recipeService.getRecipes();
