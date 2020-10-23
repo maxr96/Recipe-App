@@ -24,14 +24,14 @@ const handleAuthentication = (expiresIn: string, email: string, userId: string, 
     const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
-    return new AuthActions.AuthenticateSuccess({email, userId, token, expirationDate, redirect: true});
+    return AuthActions.authenticateSuccess({email, userId, token, expirationDate, redirect: true});
 }
 
 const handleError = (errorRes) => {
     let errorMessage = 'An uknown error occured!'
         
     if(!errorRes.error || !errorRes.error.error){
-        return of(new AuthActions.AuthenticateFail(errorMessage));
+        return of(AuthActions.authenticateFail({errorMessage}));
     }
     switch(errorRes.error.error.message) {
         case 'EMAIL_EXISTS': 
@@ -41,7 +41,7 @@ const handleError = (errorRes) => {
         case 'INVALID_PASSWORD':
             errorMessage = 'This password is incorrect.'
     }
-    return of(new AuthActions.AuthenticateFail(errorMessage));
+    return of(AuthActions.authenticateFail({errorMessage}));
 }
 
 @Injectable()
@@ -49,12 +49,12 @@ export class AuthEffects {
 
     @Effect()
     authSignup = this.actions$.pipe(
-        ofType(AuthActions.SIGNUP_START),
-        switchMap((signupAction: AuthActions.SignupStart) => {
+        ofType(AuthActions.signupStart),
+        switchMap(signupAction => {
             return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIKey,
         {
-            email: signupAction.payload.email,
-            password: signupAction.payload.password,
+            email: signupAction.email,
+            password: signupAction.password,
             returnSecureToken: true
         }).pipe(
             tap(resData => {
@@ -66,12 +66,12 @@ export class AuthEffects {
 
     @Effect()
     authLogin = this.actions$.pipe(
-        ofType(AuthActions.LOGIN_START),
-        switchMap((authData: AuthActions.LoginStart) => {
+        ofType(AuthActions.loginStart),
+        switchMap(authData => {
             return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIKey,
             {
-                email: authData.payload.email,
-                password: authData.payload.password,
+                email: authData.email,
+                password: authData.password,
                 returnSecureToken: true
             }).pipe(
                 tap(resData => {
@@ -83,15 +83,15 @@ export class AuthEffects {
 
     @Effect({dispatch: false})
     authRedirect = this.actions$.pipe(
-        ofType(AuthActions.AUTHENTICATE_SUCCESS), 
-        tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
-            if(authSuccessAction.payload.redirect) {
+        ofType(AuthActions.authenticateSuccess), 
+        tap(authSuccessAction => {
+            if(authSuccessAction.redirect) {
                 this.router.navigate(['/']);}
             }
     ));
 
     @Effect({dispatch: false})
-    authLogout = this.actions$.pipe(ofType(AuthActions.LOGOUT), tap(() => {
+    authLogout = this.actions$.pipe(ofType(AuthActions.logout), tap(() => {
         this.authService.clearLogoutTimer();
         localStorage.removeItem('userData');
         this.router.navigate(['/auth']);
@@ -99,7 +99,7 @@ export class AuthEffects {
 
     @Effect()
     autoLogin = this.actions$.pipe(
-        ofType(AuthActions.AUTO_LOGIN), 
+        ofType(AuthActions.autoLogin), 
         map(() => {
             const userData: {
                 email: string; 
@@ -115,7 +115,7 @@ export class AuthEffects {
             if (loadedUser.token) {
                 const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
                 this.authService.setLogoutTimer(expirationDuration);
-                return new AuthActions.AuthenticateSuccess({email: loadedUser.email, 
+                return AuthActions.authenticateSuccess({email: loadedUser.email, 
                     userId: loadedUser.id, 
                     token: loadedUser.token, 
                     expirationDate: new Date(userData._tokenExpirationDate),

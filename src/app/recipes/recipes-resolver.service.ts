@@ -9,7 +9,7 @@ import { map, switchMap, take } from "rxjs/operators";
 import { of } from "rxjs";
 
 @Injectable({providedIn: 'root'})
-export class RecipesResolverService implements Resolve<Recipe[]> {
+export class RecipesResolverService implements Resolve<{recipes: Recipe[]}> {
     constructor(private store: Store<fromApp.AppState>, private actions$: Actions) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -17,10 +17,10 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
             return recipesState.recipes;
         }), switchMap(recipes => {
             if(recipes.length === 0) {
-                this.store.dispatch(new RecipeActions.FetchRecipes());
-                return this.actions$.pipe(ofType(RecipeActions.SET_RECIPES), take(1));
+                this.store.dispatch(RecipeActions.fetchRecipes());
+                return this.actions$.pipe(ofType(RecipeActions.setRecipes), take(1));
             } else {
-                return of(recipes);
+                return of({recipes});
             }
         }))
 

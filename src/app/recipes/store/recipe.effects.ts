@@ -14,8 +14,8 @@ export class RecipeEffects {
   }
   @Effect()
   fetchRecipes = this.actions$.pipe(
-    ofType(RecipesActions.FETCH_RECIPES),
-    switchMap(fetchAction => {
+    ofType(RecipesActions.fetchRecipes),
+    switchMap(() => {
       return this.http.get<Recipe[]>(environment.serverUrl)
     }),
     map(recipes => {
@@ -23,15 +23,15 @@ export class RecipeEffects {
           return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients: []};
       })}),
     map(recipes => {
-      return new RecipesActions.SetRecipes(recipes);
+      return RecipesActions.setRecipes({recipes});
     })
   );
 
   @Effect({dispatch: false})
   storeRecipes = this.actions$.pipe(
-    ofType(RecipesActions.STORE_RECIPES),
+    ofType(RecipesActions.storeRecipes),
     withLatestFrom(this.store.select('recipes')),
-    switchMap(([actionData, recipesState]) => {
+    switchMap(([, recipesState]) => {
       return this.http.put(environment.serverUrl, recipesState.recipes)
     })
   )
