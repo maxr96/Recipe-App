@@ -26,7 +26,7 @@ const _recipeReducer = createReducer(
     (state, action) => ({
       ...state,
       recipes: state.recipes.map(
-        (recipe, index) => index === action.index ? { ...action.recipe } : recipe
+        (recipe, index) => index === action.index ? { ...action.newRecipe } : recipe
       )
     })
   ),
