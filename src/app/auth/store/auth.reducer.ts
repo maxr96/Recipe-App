@@ -34,16 +34,16 @@ const _authReducer = createReducer(
           loading: true
         })
       ),
-     
+
     on(AuthActions.authenticateFail,
             (state, action) => ({
                 ...state,
                 user: null,
-                authError: action,
+                authError: action.errorMessage,
                 loading: false
             })),
     on(AuthActions.clearError, (state) => ({
-        ...state, 
+        ...state,
         authError: null
     }))
 );
