@@ -1,27 +1,27 @@
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a style="cursor: pointer;" class="navbar-brand">Recipe Book</a>
-        </div>
-
-        <div class="navbar-default">
-            <ul class="nav navbar-nav">
+<mat-toolbar color="primary">
+  <div fxHide.gt-xs>
+    <button mat-icon-button (click)="onToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+  </button>
+  </div>
+  <div>
+    <a style="cursor: pointer;">
+      <mat-icon svgIcon="app-icon"></mat-icon> Cookbook</a>
+  </div>
+  <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
+    <ul fxLayout fxLayoutGap="15px" class="navigation-items">
                 <li><a routerLink="/recipes" routerLinkActive="active" *ngIf="isAutheticated">Recipes</a></li>
                 <li><a routerLink="/auth" routerLinkActive="active" *ngIf="!isAutheticated">Authenticate</a></li>
-                <li><a routerLink="/shopping-list" routerLinkActive="active">Shopping list</a></li>
-            </ul>
-            <ul class="nac navbar-nav navbar-right">
                 <li *ngIf="isAutheticated">
                     <a style="cursor: pointer;" (click)="onLogout()">Logout</a>
                 </li>
-                <li class="dropdown" appDropdown *ngIf="isAutheticated">
+                <!-- <li class="dropdown" appDropdown *ngIf="isAutheticated">
                     <a style="cursor: pointer;" class="dropdown-toogle" role="button">Manage<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a style="cursor: pointer;" (click)="onSaveData()">Save Data</a></li>
                         <li><a style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a></li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </div>
-    </div>
-</nav>
+</mat-toolbar>

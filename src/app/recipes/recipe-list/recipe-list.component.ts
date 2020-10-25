@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
+import * as RecipeActions from '../store/recipe.actions';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -19,6 +20,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
+    this.store.dispatch(RecipeActions.fetchRecipes());
     this.subscription = this.store.select('recipes')
     .pipe(map(recipeState => recipeState.recipes))
     .subscribe(

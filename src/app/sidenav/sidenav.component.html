@@ -1,0 +1,11 @@
+<mat-nav-list>
+  <a mat-list-item routerLink="/recipes" routerLinkActive="active" (click)="onSidenavClose()" *ngIf="isAutheticated">
+    <mat-icon>cake</mat-icon> <span class="nav-caption">Recipes</span>
+  </a>
+  <a mat-list-item routerLink="/auth" routerLinkActive="active" (click)="onSidenavClose()" *ngIf="!isAutheticated">
+    <mat-icon>login</mat-icon> <span class="nav-caption">Authenticate</span>
+  </a>
+  <a mat-list-item *ngIf="isAutheticated" style="cursor: pointer;" (click)="onLogout()">
+      <mat-icon>exit_to_app</mat-icon> <span class="nav-caption">Logout</span>
+    </a>
+</mat-nav-list>

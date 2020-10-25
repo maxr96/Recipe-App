@@ -16,11 +16,21 @@ import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { RecipeEffects } from './recipes/store/recipe.effects';
 import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { SidenavComponent } from './sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -33,6 +43,14 @@ import { environment } from '../environments/environment';
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({logOnly: environment.production}),
+    BrowserAnimationsModule,
+    MatTabsModule,
+    MatSidenavModule,
+    FlexLayoutModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatListModule
   ],
   bootstrap: [AppComponent]
 })
