@@ -8,6 +8,9 @@ import { RecipeListComponent } from "./recipe-list/recipe-list.component";
 import { RecipeStartComponent } from "./recipe-start/recipe-start.component";
 import { RecipesRoutingModule } from "./recipes-routing.module";
 import { RecipesComponent } from "./recipes.component";
+import { MatCardModule } from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 @NgModule({
     declarations: [
@@ -21,7 +24,9 @@ import { RecipesComponent } from "./recipes.component";
     imports: [
         RecipesRoutingModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        MatCardModule,
+        FlexLayoutModule
     ]
 })
 export class RecipesModule {
