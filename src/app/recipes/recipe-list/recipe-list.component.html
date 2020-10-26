@@ -4,8 +4,8 @@
     </div>
 </div>
 <hr>
-<div fxLayout="row" fxLayoutGap="20px">
-    <app-recipe-item *ngFor="let recipe of recipes; let i = index"
+<div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <app-recipe-item fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" fxFlex.lg="20%" *ngFor="let recipe of recipes; let i = index"
     [recipe]="recipe"
     [index]="i"></app-recipe-item>
 </div>
