@@ -14,27 +14,28 @@ export interface AuthResponseData {
     kind: string,
     idToken: string,
     email: string,
+    username: string,
     refreshToken: string;
     expiresIn: string;
     localId: string;
     registered?: boolean;
 }
 
-const handleAuthentication = (expiresIn: string, email: string, userId: string, token: string) => {
+const handleAuthentication = (expiresIn: string, email: string, username: string, userId: string, token: string) => {
     const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
-    const user = new User(email, userId, token, expirationDate);
+    const user = new User(email, username, userId, token, expirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
-    return AuthActions.authenticateSuccess({email, userId, token, expirationDate, redirect: true});
+    return AuthActions.authenticateSuccess({email, username, userId, token, expirationDate, redirect: true});
 }
 
 const handleError = (errorRes) => {
     let errorMessage = 'An uknown error occured!'
-        
+
     if(!errorRes.error || !errorRes.error.error){
         return of(AuthActions.authenticateFail({errorMessage}));
     }
     switch(errorRes.error.error.message) {
-        case 'EMAIL_EXISTS': 
+        case 'EMAIL_EXISTS':
             errorMessage = 'This email already exists.';
         case 'EMAIL_NOT_FOUND':
             errorMessage = 'This email does not exist.';
@@ -51,16 +52,12 @@ export class AuthEffects {
     authSignup = this.actions$.pipe(
         ofType(AuthActions.signupStart),
         switchMap(signupAction => {
-            return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIKey,
+            return this.http.post<AuthResponseData>(environment.serverUrl + '/sign-up',
         {
+            username: signupAction.username,
             email: signupAction.email,
-            password: signupAction.password,
-            returnSecureToken: true
+            password: signupAction.password
         }).pipe(
-            tap(resData => {
-                this.authService.setLogoutTimer(+resData.expiresIn * 1000);
-            }),
-            map(resData => handleAuthentication(resData.expiresIn, resData.email, resData.localId, resData.idToken)),
             catchError(errorRes => handleError(errorRes))
     )}))
 
@@ -68,22 +65,21 @@ export class AuthEffects {
     authLogin = this.actions$.pipe(
         ofType(AuthActions.loginStart),
         switchMap(authData => {
-            return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIKey,
+            return this.http.post<AuthResponseData>(environment.serverUrl + '/login',
             {
-                email: authData.email,
-                password: authData.password,
-                returnSecureToken: true
+                username: authData.username,
+                password: authData.password
             }).pipe(
                 tap(resData => {
                     this.authService.setLogoutTimer(+resData.expiresIn * 1000);
                 }),
-                map(resData => handleAuthentication(resData.expiresIn, resData.email, resData.localId, resData.idToken)),
+                map(resData => handleAuthentication(resData.expiresIn, resData.email, resData.username, resData.localId, resData.idToken)),
                 catchError(errorRes => handleError(errorRes))
         )}));
 
     @Effect({dispatch: false})
     authRedirect = this.actions$.pipe(
-        ofType(AuthActions.authenticateSuccess), 
+        ofType(AuthActions.authenticateSuccess),
         tap(authSuccessAction => {
             if(authSuccessAction.redirect) {
                 this.router.navigate(['/']);}
@@ -99,10 +95,11 @@ export class AuthEffects {
 
     @Effect()
     autoLogin = this.actions$.pipe(
-        ofType(AuthActions.autoLogin), 
+        ofType(AuthActions.autoLogin),
         map(() => {
             const userData: {
-                email: string; 
+                email: string;
+                username: string
                 id: string;
                 _token: string;
                 _tokenExpirationDate: string;
@@ -110,14 +107,15 @@ export class AuthEffects {
             if (!userData) {
                 return {type: 'DUMMY'};
             }
-    
-            const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+
+            const loadedUser = new User(userData.email, userData.username, userData.id, userData._token, new Date(userData._tokenExpirationDate));
             if (loadedUser.token) {
                 const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
                 this.authService.setLogoutTimer(expirationDuration);
-                return AuthActions.authenticateSuccess({email: loadedUser.email, 
-                    userId: loadedUser.id, 
-                    token: loadedUser.token, 
+                return AuthActions.authenticateSuccess({email: loadedUser.email,
+                    username: loadedUser.username,
+                    userId: loadedUser.id,
+                    token: loadedUser.token,
                     expirationDate: new Date(userData._tokenExpirationDate),
                     redirect: false
                 });

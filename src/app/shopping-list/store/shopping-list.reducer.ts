@@ -9,16 +9,16 @@ export interface State {
 
 const initialState: State = {
     ingredients: [
-        new Ingredient('Apples', 5),
-        new Ingredient('Tomatoes', 10)
+        new Ingredient('Apples', 'pieces', 5),
+        new Ingredient('Tomatoes', 'pieces', 10)
       ],
       editIndex: -1
 }
 
 const _shoppingListReducer = createReducer(
- 
+
     initialState,
-   
+
     on(
       ShoppingListActions.addIngredient,
       (state, action) => ({
@@ -26,7 +26,7 @@ const _shoppingListReducer = createReducer(
         ingredients: state.ingredients.concat(action.ingredient)
       })
     ),
-   
+
     on(
       ShoppingListActions.addIngredients,
       (state, action) => ({
@@ -34,7 +34,7 @@ const _shoppingListReducer = createReducer(
         ingredients: state.ingredients.concat(...action.ingredients)
       })
     ),
-   
+
     on(
       ShoppingListActions.updateIngredient,
       (state, action) => ({
@@ -45,7 +45,7 @@ const _shoppingListReducer = createReducer(
         )
       })
     ),
-   
+
     on(
       ShoppingListActions.deleteIngredient,
       (state) => ({
@@ -56,7 +56,7 @@ const _shoppingListReducer = createReducer(
         )
       })
     ),
-   
+
     on(
       ShoppingListActions.startEdit,
       (state, action) => ({
@@ -64,7 +64,7 @@ const _shoppingListReducer = createReducer(
         action.index
       })
     ),
-   
+
     on(
       ShoppingListActions.stopEdit,
       (state) => ({
@@ -73,8 +73,8 @@ const _shoppingListReducer = createReducer(
     )
 
   );
-   
-   
+
+
   export function shoppingListReducer(state: State, action: Action) {
     return _shoppingListReducer(state, action);
   }
