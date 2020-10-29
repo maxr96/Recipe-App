@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -65,16 +65,17 @@ export class AuthEffects {
     authLogin = this.actions$.pipe(
         ofType(AuthActions.loginStart),
         switchMap(authData => {
-            return this.http.post<AuthResponseData>(environment.serverUrl + '/login',
+            return this.http.post(environment.serverUrl + '/login',
             {
                 username: authData.username,
                 password: authData.password
-            }).pipe(
+            }, {observe: 'response'}).pipe(
                 tap(resData => {
-                    this.authService.setLogoutTimer(+resData.expiresIn * 1000);
-                }),
-                map(resData => handleAuthentication(resData.expiresIn, resData.email, resData.username, resData.localId, resData.idToken)),
-                catchError(errorRes => handleError(errorRes))
+                  console.log(resData.headers.get('authorization'))
+                    // this.authService.setLogoutTimer(+resData.headers.get('Authorization').expiresIn * 1000);
+                })
+                // map(resData => handleAuthentication(resData.expiresIn, resData.email, resData.username, resData.localId, resData.idToken)),
+                // catchError(errorRes => handleError(errorRes))
         )}));
 
     @Effect({dispatch: false})

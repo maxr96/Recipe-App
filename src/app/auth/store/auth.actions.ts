@@ -14,7 +14,7 @@ export const authenticateSuccess = createAction('[Auth] Authenticate Success',
 export const logout = createAction('[Auth] Logout');
 
 export const loginStart = createAction(
-    '[Auth] Login Start', props<{ email: string; username: string; password: string}>());
+    '[Auth] Login Start', props<{ username: string; password: string}>());
 
 export const authenticateFail = createAction('[Auth] Authenticate Fail',
     props<{errorMessage: string}>())

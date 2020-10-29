@@ -7,8 +7,8 @@ export class Recipe {
     public category: string;
     public time: string;
     public author: string;
-    public whenCreated: number;
-    public whenUpdated: number;
+    public createDate: number;
+    public updateDate: number;
     public ingredients: Ingredient[];
 
     constructor(name: string, description: string, imagePath: string, ingredients: Ingredient[]) {

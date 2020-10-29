@@ -6,11 +6,10 @@ import * as AuthActions from './store/auth.actions';
 import { Store } from "@ngrx/store";
 
 @Component({
-    selector: 'app-auth',
-    templateUrl: './auth.component.html'
+    selector: 'app-login',
+    templateUrl: './login.component.html'
 })
-export class AuthComponent implements OnInit, OnDestroy {
-    isLoginMode = true;
+export class LoginComponent implements OnInit, OnDestroy {
     isLoading = false;
     error: string = null;
     private storeSub: Subscription;
@@ -27,26 +26,17 @@ export class AuthComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.storeSub.unsubscribe();
     }
-    onSwitchMode() {
-        this.isLoginMode = !this.isLoginMode;
-    }
 
     onSubmit(form: NgForm) {
         if (!form.valid) {
             return;
         }
-        const email = form.value.email;
         const password = form.value.password;
         const username = form.value.username;
 
         this.isLoading = true;
 
-        if (this.isLoginMode) {
-            this.store.dispatch(AuthActions.loginStart({email, username, password}));
-
-        } else {
-            this.store.dispatch(AuthActions.signupStart({email, username, password}))
-        }
+        this.store.dispatch(AuthActions.loginStart({username, password}));
 
         form.reset();
     }
