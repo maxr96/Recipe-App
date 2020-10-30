@@ -1,23 +1,23 @@
-<div class="row">
-    <div class="col-xs-12 col-md-6 col-md-offset-3">
-        <app-alert [message]="error" *ngIf="error" (close)="onHandleError()"></app-alert>
-        <div *ngIf="isLoading" style="text-align: center;">
-            <app-loading-spinner></app-loading-spinner>
-        </div>
-        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="username" id="username" class="form-control" ngModel name="username"
-              required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="email" class="form-control" ngModel name="password"
-                required>
-            </div>
-            <div>
-                <button mat-raised-button color="primary" type="submit" [disabled]="authForm.invalid">Login</button>
-            </div>
-        </form>
-    </div>
+<div fxLayout="column" fxLayoutAlign="space-around center">
+  <app-alert [message]="error" *ngIf="error" (close)="onHandleError()"></app-alert>
+  <div *ngIf="isLoading">
+      <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div fxFlex="50"></div>
+  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column">
+      <mat-form-field>
+        <mat-label for="username">Username</mat-label>
+        <input matInput type="username" id="username" ngModel name="username"
+        required>
+      </mat-form-field>
+      <mat-form-field>
+          <mat-label for="password">Password</mat-label>
+          <input matInput type="password" id="email" ngModel name="password"
+          required>
+      </mat-form-field>
+      <div fxLayout="row" fxLayout="space-around">
+          <button mat-raised-button color="primary" type="submit" [disabled]="authForm.invalid">Login</button>
+          <button mat-button color="primary" routerLink="/auth/signup">Signup</button>
+      </div>
+    </form>
 </div>
