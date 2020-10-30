@@ -19,7 +19,7 @@ const _authReducer = createReducer(
     on(AuthActions.authenticateSuccess, (state, action) => ({
         ...state,
         authError: null,
-        user: new User(action.email, action.username, action.userId, action.token, action.expirationDate)
+        user: new User('', action.username, action.token, action.expirationDate)
     })),
     on(AuthActions.logout, (state) => ({
         ...state,

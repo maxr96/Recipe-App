@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth.service';
 import { User } from '../user.model';
 import * as AuthActions from './auth.actions';
-
+import jwt_decode from 'jwt-decode';
 
 export interface AuthResponseData {
     kind: string,
@@ -21,15 +21,22 @@ export interface AuthResponseData {
     registered?: boolean;
 }
 
-const handleAuthentication = (expiresIn: string, email: string, username: string, userId: string, token: string) => {
-    const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
-    const user = new User(email, username, userId, token, expirationDate);
-    localStorage.setItem('userData', JSON.stringify(user));
-    return AuthActions.authenticateSuccess({email, username, userId, token, expirationDate, redirect: true});
+export interface Token {
+  exp: number,
+  sub: string
+}
+
+const handleAuthentication = (decodedToken: Token, token: string) => {
+     const expirationDate = new Date(new Date().getTime() + decodedToken.exp);
+     const user = new User('', decodedToken.sub, token, expirationDate);
+     localStorage.setItem('userData', JSON.stringify(user));
+     return AuthActions.authenticateSuccess({username: decodedToken.sub, token, expirationDate, redirect: true});
 }
 
 const handleError = (errorRes) => {
     let errorMessage = 'An uknown error occured!'
+
+    console.log(errorRes);
 
     if(!errorRes.error || !errorRes.error.error){
         return of(AuthActions.authenticateFail({errorMessage}));
@@ -70,12 +77,13 @@ export class AuthEffects {
                 username: authData.username,
                 password: authData.password
             }, {observe: 'response'}).pipe(
-                tap(resData => {
-                  console.log(resData.headers.get('authorization'))
-                    // this.authService.setLogoutTimer(+resData.headers.get('Authorization').expiresIn * 1000);
-                })
-                // map(resData => handleAuthentication(resData.expiresIn, resData.email, resData.username, resData.localId, resData.idToken)),
-                // catchError(errorRes => handleError(errorRes))
+                map(resData => {
+                  var token = resData.headers.get('authorization');
+                  var decodedToken = jwt_decode(resData.headers.get('authorization'));
+                  this.authService.setLogoutTimer(decodedToken.exp);
+                  return handleAuthentication(decodedToken, token)
+                }),
+                catchError(errorRes => handleError(errorRes))
         )}));
 
     @Effect({dispatch: false})
