@@ -4,18 +4,23 @@
         <app-loading-spinner></app-loading-spinner>
     </div>
     <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column">
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label for="username">Username</mat-label>
           <input matInput type="username" id="username" ngModel name="username" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
             <mat-label for="email">E-Mail</mat-label>
             <input matInput type="email" id="email" ngModel name="email" required email>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
             <mat-label for="password">Password</mat-label>
             <input matInput type="password" id="email" ngModel name="password" required
+            [type]="hide ? 'password' : 'text'"
             pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$">
+            <mat-hint align="start">Min 1 upper case and 1 number</mat-hint>
+            <button class="hide-icon" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
         </mat-form-field>
         <div>
             <button mat-raised-button color="primary" type="submit" [disabled]="authForm.invalid">Sign Up</button>

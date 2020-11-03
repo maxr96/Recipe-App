@@ -7,6 +7,7 @@ import { SignupComponent } from "./signup.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
@@ -17,6 +18,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatButtonModule,
     FlexLayoutModule,
     MatInputModule,
+    MatIconModule,
     RouterModule.forChild([{
       path: '',
       redirectTo: 'login',

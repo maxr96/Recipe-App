@@ -3,17 +3,19 @@
   <div *ngIf="isLoading">
       <app-loading-spinner></app-loading-spinner>
   </div>
-  <div fxFlex="50"></div>
   <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label for="username">Username</mat-label>
         <input matInput type="username" id="username" ngModel name="username"
         required>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
           <mat-label for="password">Password</mat-label>
           <input matInput type="password" id="email" ngModel name="password"
-          required>
+          required [type]="hide ? 'password' : 'text'">
+          <button class="hide-icon" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
       </mat-form-field>
       <div fxLayout="row" fxLayout="space-around">
           <button mat-raised-button color="primary" type="submit" [disabled]="authForm.invalid">Login</button>

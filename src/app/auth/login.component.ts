@@ -7,9 +7,11 @@ import { Store } from "@ngrx/store";
 
 @Component({
     selector: 'app-login',
-    templateUrl: './login.component.html'
+    templateUrl: './login.component.html',
+    styleUrls: ['./auth.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+    hide = true;
     isLoading = false;
     error: string = null;
     private storeSub: Subscription;

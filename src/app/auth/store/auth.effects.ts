@@ -117,13 +117,12 @@ export class AuthEffects {
                 return {type: 'DUMMY'};
             }
 
-            const loadedUser = new User(userData.email, userData.username, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+            const loadedUser = new User(userData.email, userData.username, userData._token, new Date(userData._tokenExpirationDate));
             if (loadedUser.token) {
                 const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
                 this.authService.setLogoutTimer(expirationDuration);
-                return AuthActions.authenticateSuccess({email: loadedUser.email,
+                return AuthActions.authenticateSuccess({
                     username: loadedUser.username,
-                    userId: loadedUser.id,
                     token: loadedUser.token,
                     expirationDate: new Date(userData._tokenExpirationDate),
                     redirect: false

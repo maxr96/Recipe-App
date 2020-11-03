@@ -16,7 +16,7 @@ export class RecipeEffects {
   fetchRecipes = this.actions$.pipe(
     ofType(RecipesActions.fetchRecipes),
     switchMap(() => {
-      return this.http.get<Recipe[]>(environment.serverUrl)
+      return this.http.get<Recipe[]>(environment.serverUrl + '/recipes')
     }),
     map(recipes => {
       return recipes.map(recipe => {
