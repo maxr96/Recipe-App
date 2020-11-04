@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -12,12 +12,10 @@ import jwt_decode from 'jwt-decode';
 
 export interface AuthResponseData {
     kind: string,
-    idToken: string,
     email: string,
     username: string,
     refreshToken: string;
     expiresIn: string;
-    localId: string;
     registered?: boolean;
 }
 
@@ -33,21 +31,23 @@ const handleAuthentication = (decodedToken: Token, token: string) => {
      return AuthActions.authenticateSuccess({username: decodedToken.sub, token, expirationDate, redirect: true});
 }
 
-const handleError = (errorRes) => {
+const handleError = (errorRes: HttpErrorResponse) => {
     let errorMessage = 'An uknown error occured!'
 
-    console.log(errorRes);
-
-    if(!errorRes.error || !errorRes.error.error){
+    if(!errorRes.error){
         return of(AuthActions.authenticateFail({errorMessage}));
     }
-    switch(errorRes.error.error.message) {
+
+    switch(errorRes.error) {
         case 'EMAIL_EXISTS':
             errorMessage = 'This email already exists.';
-        case 'EMAIL_NOT_FOUND':
-            errorMessage = 'This email does not exist.';
+            break;
+        case 'USERNAME_EXISTS':
+            errorMessage = 'This username already exists.';
+            break;
         case 'INVALID_PASSWORD':
-            errorMessage = 'This password is incorrect.'
+            errorMessage = 'This password is incorrect.';
+            break;
     }
     return of(AuthActions.authenticateFail({errorMessage}));
 }
@@ -59,14 +59,22 @@ export class AuthEffects {
     authSignup = this.actions$.pipe(
         ofType(AuthActions.signupStart),
         switchMap(signupAction => {
-            return this.http.post<AuthResponseData>(environment.serverUrl + '/sign-up',
+            return this.http.post(environment.serverUrl + '/sign-up',
         {
             username: signupAction.username,
             email: signupAction.email,
             password: signupAction.password
-        }).pipe(
-            catchError(errorRes => handleError(errorRes))
-    )}))
+        }, {observe: 'response'}).pipe(
+            catchError(errorRes => handleError(errorRes)),
+            map((res: HttpResponse<AuthResponseData>) => {
+              if(res.status === 201){
+                this.router.navigate(['/auth', 'login']);
+                return {type: 'DUMMY'}
+              } else {
+                return res.body;
+              }
+            }
+    ))}))
 
     @Effect()
     authLogin = this.actions$.pipe(
