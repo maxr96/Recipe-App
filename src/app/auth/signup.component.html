@@ -1,5 +1,4 @@
 <div fxLayout="column" fxLayoutAlign="space-around center">
-    <app-alert [message]="error" *ngIf="error" (close)="onHandleError()"></app-alert>
     <div *ngIf="isLoading">
         <app-loading-spinner></app-loading-spinner>
     </div>
@@ -18,13 +17,13 @@
             [type]="hide ? 'password' : 'text'"
             pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$">
             <mat-hint align="start">Min 1 upper case and 1 number</mat-hint>
-            <button class="hide-icon" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <button class="hide-icon" type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
         </mat-form-field>
         <div>
             <button mat-raised-button color="primary" type="submit" [disabled]="authForm.invalid">Sign Up</button>
-            <button mat-button color="primary" routerLink="/auth/login">Login</button>
+            <button mat-button color="primary" routerLink="/auth/login" type="button">Login</button>
         </div>
     </form>
 </div>

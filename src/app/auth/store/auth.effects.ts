@@ -70,9 +70,8 @@ export class AuthEffects {
               if(res.status === 201){
                 this.router.navigate(['/auth', 'login']);
                 return AuthActions.signupSuccess();
-              } else {
-                return res.body;
               }
+              return res;
             }
     ))}))
 
@@ -91,7 +90,7 @@ export class AuthEffects {
                   this.authService.setLogoutTimer(decodedToken.exp);
                   return handleAuthentication(decodedToken, token)
                 }),
-                catchError(errorRes => handleError(errorRes))
+                catchError(() => of(AuthActions.authenticateFail({errorMessage: "Please check your username and password!"})))
         )}));
 
     @Effect({dispatch: false})

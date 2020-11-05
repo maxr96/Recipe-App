@@ -4,6 +4,8 @@ import { Subscription } from "rxjs";
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
 import { Store } from "@ngrx/store";
+import { MatDialog } from "@angular/material/dialog";
+import { InfoDialog } from "../shared/info-dialog/info-dialog.component";
 
 @Component({
     selector: 'app-signup',
@@ -16,12 +18,24 @@ export class SignupComponent implements OnInit, OnDestroy {
     error: string = null;
     private storeSub: Subscription;
 
-    constructor(private store: Store<fromApp.AppState>) {}
+    constructor(private store: Store<fromApp.AppState>, public dialog: MatDialog) {}
 
     ngOnInit(){
         this.storeSub = this.store.select('auth').subscribe(authState =>{
             this.isLoading = authState.loading;
             this.error = authState.authError;
+
+            if(!!this.error){
+              const dialogRef = this.dialog.open(InfoDialog, {
+                width: '500px',
+                data: {title: 'Signup Failed!', message: this.error}
+              });
+
+              dialogRef.afterClosed().subscribe(() => {
+                console.log('The dialog was closed');
+                this.store.dispatch(AuthActions.clearError());
+              });
+            }
         })
     }
 
@@ -42,9 +56,5 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(AuthActions.signupStart({email, username, password}))
 
         form.reset();
-    }
-
-    onHandleError() {
-        this.store.dispatch(AuthActions.clearError());
     }
 }
