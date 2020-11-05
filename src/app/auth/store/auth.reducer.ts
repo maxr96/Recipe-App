@@ -16,10 +16,11 @@ const initialState: State = {
 
 const _authReducer = createReducer(
     initialState,
-    on(AuthActions.authenticateSuccess, (state, action) => ({
+    on(AuthActions.loginSuccess, (state, action) => ({
         ...state,
         authError: null,
-        user: new User('', action.username, action.token, action.expirationDate)
+        user: new User('', action.username, action.token, action.expirationDate),
+        loading: false
     })),
     on(AuthActions.logout, (state) => ({
         ...state,
@@ -45,6 +46,11 @@ const _authReducer = createReducer(
     on(AuthActions.clearError, (state) => ({
         ...state,
         authError: null
+    })),
+    on(AuthActions.signupSuccess, (state) => ({
+      ...state,
+      authError: null,
+      loading: false
     }))
 );
 

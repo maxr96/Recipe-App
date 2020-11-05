@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 
-export const authenticateSuccess = createAction('[Auth] Authenticate Success',
+export const loginSuccess = createAction('[Auth] Login Success',
     props<{
         username: string;
         token: string;
@@ -19,6 +19,8 @@ export const authenticateFail = createAction('[Auth] Authenticate Fail',
 
 export const signupStart = createAction('[Auth] Signup Start',
     props<{ email: string; username: string; password: string}>())
+
+export const signupSuccess = createAction('[Auth] Signup Success')
 
 export const clearError = createAction('[Auth] Clear Error');
 

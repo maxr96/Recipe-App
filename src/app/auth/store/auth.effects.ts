@@ -28,7 +28,7 @@ const handleAuthentication = (decodedToken: Token, token: string) => {
      const expirationDate = new Date(new Date().getTime() + decodedToken.exp);
      const user = new User('', decodedToken.sub, token, expirationDate);
      localStorage.setItem('userData', JSON.stringify(user));
-     return AuthActions.authenticateSuccess({username: decodedToken.sub, token, expirationDate, redirect: true});
+     return AuthActions.loginSuccess({username: decodedToken.sub, token, expirationDate, redirect: true});
 }
 
 const handleError = (errorRes: HttpErrorResponse) => {
@@ -69,7 +69,7 @@ export class AuthEffects {
             map((res: HttpResponse<AuthResponseData>) => {
               if(res.status === 201){
                 this.router.navigate(['/auth', 'login']);
-                return {type: 'DUMMY'}
+                return AuthActions.signupSuccess();
               } else {
                 return res.body;
               }
@@ -96,7 +96,7 @@ export class AuthEffects {
 
     @Effect({dispatch: false})
     authRedirect = this.actions$.pipe(
-        ofType(AuthActions.authenticateSuccess),
+        ofType(AuthActions.loginSuccess),
         tap(authSuccessAction => {
             if(authSuccessAction.redirect) {
                 this.router.navigate(['/']);}
@@ -129,7 +129,7 @@ export class AuthEffects {
             if (loadedUser.token) {
                 const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
                 this.authService.setLogoutTimer(expirationDuration);
-                return AuthActions.authenticateSuccess({
+                return AuthActions.loginSuccess({
                     username: loadedUser.username,
                     token: loadedUser.token,
                     expirationDate: new Date(userData._tokenExpirationDate),
