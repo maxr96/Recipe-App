@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormGroup, NgForm } from "@angular/forms";
 import { Subscription } from "rxjs";
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
@@ -17,6 +17,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     isLoading = false;
     error: string = null;
     private storeSub: Subscription;
+    private readonly DIALOG_TITLE = 'Signup Failed!';
+    private readonly DIALOG_WIDTH = '500px';
 
     constructor(private store: Store<fromApp.AppState>, public dialog: MatDialog) {}
 
@@ -27,12 +29,11 @@ export class SignupComponent implements OnInit, OnDestroy {
 
             if(!!this.error){
               const dialogRef = this.dialog.open(InfoDialog, {
-                width: '500px',
-                data: {title: 'Signup Failed!', message: this.error}
+                width: this.DIALOG_WIDTH,
+                data: {title: this.DIALOG_TITLE, message: this.error}
               });
 
               dialogRef.afterClosed().subscribe(() => {
-                console.log('The dialog was closed');
                 this.store.dispatch(AuthActions.clearError());
               });
             }
@@ -47,6 +48,16 @@ export class SignupComponent implements OnInit, OnDestroy {
         if (!form.valid) {
             return;
         }
+
+        if(form.value.password !== form.value.password2) {
+          this.dialog.open(InfoDialog, {
+            width: this.DIALOG_WIDTH,
+            data: {title: this.DIALOG_TITLE, message: "The passwords you entered don't match. Please enter them again."}
+          }).afterClosed().subscribe(() => {
+            this.resetForm(form.form);
+          });
+          return;
+        }
         const email = form.value.email;
         const password = form.value.password;
         const username = form.value.username;
@@ -55,6 +66,11 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(AuthActions.signupStart({email, username, password}))
 
-        form.reset();
+        this.resetForm(form.form);
+    }
+
+    resetForm(form: FormGroup) {
+      form.get('password').reset();
+      form.get('password2').reset();
     }
 }

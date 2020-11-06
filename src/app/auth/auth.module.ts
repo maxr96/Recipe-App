@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NoCopyPasteDirective } from './no-copy-paste.directive';
 
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent],
+  declarations: [LoginComponent, SignupComponent, NoCopyPasteDirective],
   imports: [FormsModule,
     MatFormFieldModule,
     MatButtonModule,
