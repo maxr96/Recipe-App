@@ -86,7 +86,7 @@ export class AuthEffects {
             }, {observe: 'response'}).pipe(
                 map(resData => {
                   var token = resData.headers.get('authorization');
-                  var decodedToken = jwt_decode(resData.headers.get('authorization'));
+                  var decodedToken = jwt_decode<Token>(resData.headers.get('authorization'));
                   this.authService.setLogoutTimer(decodedToken.exp);
                   return handleAuthentication(decodedToken, token)
                 }),
