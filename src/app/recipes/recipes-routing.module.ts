@@ -17,6 +17,11 @@ const routes: Routes = [{
     }
   ],
 }, {
+  path: 'new',
+  component: RecipeEditComponent,
+  canActivate: [AuthGuard]
+},
+{
   path: ':id',
   component: RecipeDetailComponent,
   resolve: [RecipesResolverService],
@@ -25,12 +30,8 @@ const routes: Routes = [{
 {
   path: ':id/edit',
   component: RecipeEditComponent,
+  canActivate: [AuthGuard],
   resolve: [RecipesResolverService]
-},
-{
-  path: 'new',
-  component: RecipeEditComponent,
-  canActivate: [AuthGuard]
 }];
 
 @NgModule({

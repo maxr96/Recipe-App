@@ -1,10 +1,10 @@
-<div class="row">
+<div fxLayout="row" fxLayoutAlign="center center">
   <div class="col-xs-12">
     <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-xs-12">
-          <button 
-          type="submit" 
+          <button
+          type="submit"
           class="btn btn-success"
           [disabled]="recipeForm.invalid">Save</button>
           <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
@@ -34,6 +34,16 @@
         </div>
       </div>
       <div class="row">
+        <mat-form-field appearance="fill">
+          <mat-label>Category</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let category of categories">
+              {{category}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
         <div class="col-xs-12">
             <img [src]="imagePath.value" class="img-responsive">
         </div>
@@ -52,8 +62,8 @@
       </div>
       <div class="row">
         <div class="col-xs-12" formArrayName="ingredients">
-            <div 
-                class="row" 
+            <div
+                class="row"
                 *ngFor="let ingredientCtrl of controls; let i = index"
                 [formGroupName]="i"
                 style="margin-top: 10px;">
@@ -72,8 +82,8 @@
                 />
                 </div>
                 <div class="col-xs-2">
-                    <button 
-                    type="button" 
+                    <button
+                    type="button"
                     class="btn btn-danger"
                     (click)="onDeleteIngredient(i)">X</button>
                 </div>
@@ -81,8 +91,8 @@
             <hr>
             <div class="row">
                 <div class="col-xs-12">
-                    <button 
-                    class="btn btn-success" 
+                    <button
+                    class="btn btn-success"
                     (click)="onAddIngredient()"
                     type="button"
                     >Add Ingredient</button>

@@ -16,7 +16,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   id: number;
   editMode = false;
   recipeForm: FormGroup;
-
+  categories = ['Main Dish', 'Sauce', 'Drinks'];
   private storeSub: Subscription;
 
   get controls() {
@@ -56,14 +56,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           for(let ingredient of recipe.ingredients) {
             recipeIngredients.push(
               new FormGroup({
-                'name': new FormControl(ingredient.name, Validators.required), 
+                'name': new FormControl(ingredient.name, Validators.required),
                 'amount': new FormControl(ingredient.amount, [
-                  Validators.required, 
+                  Validators.required,
                   Validators.pattern(/^[1-9]+[0-9]*$/)])
               })
             )
           }
-        } 
+        }
       });
     }
     this.recipeForm = new FormGroup({
@@ -88,7 +88,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       new FormGroup({
         'name': new FormControl(null, Validators.required),
         'amount': new FormControl(null,[
-          Validators.required, 
+          Validators.required,
           Validators.pattern(/^[1-9]+[0-9]*$/)])
       })
     )

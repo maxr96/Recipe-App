@@ -35,4 +35,12 @@ export class RecipeEffects {
       return this.http.put(environment.serverUrl, recipesState.recipes)
     })
   )
+
+  @Effect()
+  postRecipe = this.actions$.pipe(
+    ofType(RecipesActions.postRecipe),
+    switchMap((action) => {
+      return this.http.post<Recipe>(environment.serverUrl + '/recipes', action.recipe)
+    }),
+  )
 }

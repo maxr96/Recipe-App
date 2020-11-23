@@ -9,6 +9,9 @@ import { RecipeStartComponent } from "./recipe-start/recipe-start.component";
 import { RecipesRoutingModule } from "./recipes-routing.module";
 import { RecipesComponent } from "./recipes.component";
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormField } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
@@ -26,7 +29,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         ReactiveFormsModule,
         SharedModule,
         MatCardModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        MatButtonModule,
+        MatFormField,
+        MatSelectModule
     ]
 })
 export class RecipesModule {
