@@ -3,8 +3,8 @@ import { User } from "../user.model";
 import * as  AuthActions from "./auth.actions";
 
 export interface State {
-    user: User;
-    authError: string;
+    user: User | null;
+    authError: string | null;
     loading: boolean
 }
 

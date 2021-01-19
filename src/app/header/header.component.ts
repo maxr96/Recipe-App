@@ -15,7 +15,7 @@ import * as RecipeActions from '../recipes/store/recipe.actions';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() public sidenavToggle = new EventEmitter<void>();
     isAutheticated = false;
-    private userSub: Subscription;
+    private userSub: Subscription | undefined;
 
     constructor(private store: Store<fromApp.AppState>) {}
 
@@ -39,7 +39,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.userSub.unsubscribe();
+        if(this.userSub !== undefined){
+            this.userSub.unsubscribe();
+        }
     }
 
     onToggleSidenav = () => {
