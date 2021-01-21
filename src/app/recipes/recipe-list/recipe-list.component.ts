@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
-  subscription: Subscription;
+  subscription!: Subscription;
   constructor(private router: Router,
     private route: ActivatedRoute,
     private store: Store<fromApp.AppState>) { }

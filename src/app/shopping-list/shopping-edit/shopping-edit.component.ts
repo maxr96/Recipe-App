@@ -12,10 +12,10 @@ import * as fromApp from '../../store/app.reducer';
   styleUrls: ['./shopping-edit.component.css']
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
-  @ViewChild('f',{static: false}) shoppingListForm: NgForm;
-  editingSubscription: Subscription;
+  @ViewChild('f',{static: false}) shoppingListForm!: NgForm;
+  editingSubscription: Subscription | undefined;
   editMode = false;
-  editedItem: Ingredient;
+  editedItem: Ingredient | undefined;
 
   constructor(private store: Store<fromApp.AppState>) { }
 
@@ -62,6 +62,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.editingSubscription.unsubscribe();
+    if(this.editingSubscription){
+      this.editingSubscription.unsubscribe();
+    }
   }
 }

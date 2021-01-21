@@ -13,14 +13,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./recipe-edit.component.css']
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
-  id: number;
+  id: number | undefined;
   editMode = false;
-  recipeForm: FormGroup;
+  recipeForm!: FormGroup;
   categories = ['Main Dish', 'Sauce', 'Drinks'];
-  private storeSub: Subscription;
+  private storeSub: Subscription | undefined;
 
   get controls() {
-    return (<FormArray>this.recipeForm.get('ingredients')).controls;
+    return !!this.recipeForm ? (<FormArray>this.recipeForm.get('ingredients')).controls : null;
   }
 
   constructor(private route: ActivatedRoute,
@@ -31,7 +31,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     .subscribe(
       (params: Params) => {
         this.id = +params['id'];
-        this.editMode = params['id'] != null;
+        this.editMode = params['id'] !== null;
         this.initForm();
       }
     )
@@ -49,19 +49,21 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           return index === this.id;
         })
       })).subscribe(recipe => {
-        recipeName = recipe.name;
-        recipeImagePath = recipe.imagePath;
-        recipeDescription = recipe.description;
-        if(recipe.ingredients){
-          for(let ingredient of recipe.ingredients) {
-            recipeIngredients.push(
-              new FormGroup({
-                'name': new FormControl(ingredient.name, Validators.required),
-                'amount': new FormControl(ingredient.amount, [
-                  Validators.required,
-                  Validators.pattern(/^[1-9]+[0-9]*$/)])
-              })
-            )
+        if(recipe !== undefined){
+          recipeName = recipe.name;
+          recipeImagePath = recipe.imagePath;
+          recipeDescription = recipe.description;
+          if(recipe.ingredients){
+            for(let ingredient of recipe.ingredients) {
+              recipeIngredients.push(
+                new FormGroup({
+                  'name': new FormControl(ingredient.name, Validators.required),
+                  'amount': new FormControl(ingredient.amount, [
+                    Validators.required,
+                    Validators.pattern(/^[1-9]+[0-9]*$/)])
+                })
+              )
+            }
           }
         }
       });
@@ -76,7 +78,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.editMode) {
-      this.store.dispatch(RecipeActions.updateRecipe({index: this.id, newRecipe: this.recipeForm.value}));
+      if(this.id){
+        this.store.dispatch(RecipeActions.updateRecipe({index: this.id, newRecipe: this.recipeForm.value}));
+      }
     } else {
       this.store.dispatch(RecipeActions.addRecipe(this.recipeForm.value));
     }

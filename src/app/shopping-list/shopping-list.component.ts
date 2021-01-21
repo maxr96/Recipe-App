@@ -11,7 +11,7 @@ import * as ShoppingListActions from './store/shopping-list.actions';
   styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit {
-  ingredients: Observable<{ ingredients: Ingredient[]}>;
+  ingredients!: Observable<{ ingredients: Ingredient[]}>;
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {

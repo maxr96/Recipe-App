@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  private userSub: Subscription;
+  private userSub!: Subscription;
   @Output() sidenavClose = new EventEmitter<void>();
   isAutheticated = false;
   constructor(private store: Store<fromApp.AppState>) {}
@@ -32,6 +32,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.onSidenavClose();
 }
 ngOnDestroy() {
-  this.userSub.unsubscribe();
+    this.userSub.unsubscribe();
 }
 }

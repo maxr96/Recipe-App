@@ -119,7 +119,7 @@ export class AuthEffects {
                 id: string;
                 _token: string;
                 _tokenExpirationDate: string;
-            } = JSON.parse(localStorage.getItem('userData'));
+            } = JSON.parse(localStorage.getItem('userData')!);
             if (!userData) {
                 return {type: 'DUMMY'};
             }

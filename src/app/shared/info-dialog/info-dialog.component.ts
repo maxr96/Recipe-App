@@ -11,8 +11,8 @@ export interface DialogData {
     templateUrl: './info-dialog.component.html'
 })
 export class InfoDialog {
-    @Input() title: string;
-    @Input() message: string;
+    @Input() title!: string;
+    @Input() message!: string;
 
     constructor(public dialogRef: MatDialogRef<InfoDialog>, @Inject(MAT_DIALOG_DATA) public data: DialogData){}
 }
