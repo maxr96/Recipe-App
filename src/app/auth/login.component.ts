@@ -15,8 +15,8 @@ import { InfoDialog } from "../shared/info-dialog/info-dialog.component";
 export class LoginComponent implements OnInit, OnDestroy {
     hide = true;
     isLoading = false;
-    error: string = null;
-    private storeSub: Subscription;
+    error: string | null = null;
+    private storeSub: Subscription | undefined;
 
     constructor(private store: Store<fromApp.AppState>, public dialog: MatDialog) {}
 
@@ -40,7 +40,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.storeSub.unsubscribe();
+        if(this.storeSub){
+            this.storeSub.unsubscribe();
+        }
     }
 
     onSubmit(form: NgForm) {

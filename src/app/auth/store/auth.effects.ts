@@ -59,19 +59,19 @@ export class AuthEffects {
     authSignup = this.actions$.pipe(
         ofType(AuthActions.signupStart),
         switchMap(signupAction => {
-            return this.http.post(environment.serverUrl + '/sign-up',
+            return this.http.post<any>(environment.serverUrl + '/sign-up',
         {
             username: signupAction.username,
             email: signupAction.email,
             password: signupAction.password
-        }, {observe: 'response'}).pipe(
+        }).pipe(
             catchError(errorRes => handleError(errorRes)),
             map((res: HttpResponse<AuthResponseData>) => {
               if(res.status === 201){
                 this.router.navigate(['/auth', 'login']);
                 return AuthActions.signupSuccess();
               }
-              return res;
+              return res.body;
             }
     ))}))
 
@@ -86,7 +86,10 @@ export class AuthEffects {
             }, {observe: 'response'}).pipe(
                 map(resData => {
                   var token = resData.headers.get('authorization');
-                  var decodedToken = jwt_decode<Token>(resData.headers.get('authorization'));
+                  if(!token){
+                    return AuthActions.authenticateFail({errorMessage: "Please check your username and password!"})
+                  }
+                  var decodedToken = jwt_decode<Token>(token);
                   this.authService.setLogoutTimer(decodedToken.exp);
                   return handleAuthentication(decodedToken, token)
                 }),

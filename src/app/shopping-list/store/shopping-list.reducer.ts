@@ -75,6 +75,6 @@ const _shoppingListReducer = createReducer(
   );
 
 
-  export function shoppingListReducer(state: State, action: Action) {
+  export function shoppingListReducer(state: State | undefined, action: Action) {
     return _shoppingListReducer(state, action);
   }

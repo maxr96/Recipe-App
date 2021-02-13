@@ -50,6 +50,6 @@ const _recipeReducer = createReducer(
 );
  
  
-export function recipeReducer(state: State, action: Action) {
+export function recipeReducer(state: State | undefined, action: Action) {
   return _recipeReducer(state, action);
 }

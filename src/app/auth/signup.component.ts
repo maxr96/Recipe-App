@@ -15,8 +15,8 @@ import { InfoDialog } from "../shared/info-dialog/info-dialog.component";
 export class SignupComponent implements OnInit, OnDestroy {
     hide = true;
     isLoading = false;
-    error: string = null;
-    private storeSub: Subscription;
+    error: string | null = null;
+    private storeSub: Subscription | undefined;
     private readonly DIALOG_TITLE = 'Signup Failed!';
     private readonly DIALOG_WIDTH = '500px';
 
@@ -41,7 +41,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+      if(this.storeSub){
         this.storeSub.unsubscribe();
+      }
     }
 
     onSubmit(form: NgForm) {
@@ -70,7 +72,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     resetForm(form: FormGroup) {
-      form.get('password').reset();
-      form.get('password2').reset();
+      form.get('password')?.reset();
+      form.get('password2')?.reset();
     }
 }
