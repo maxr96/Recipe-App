@@ -1,8 +1,9 @@
-<div fxLayout="column" fxLayoutAlign="space-around center">
+<div fxLayout="column" fxLayoutAlign="space-around center" class="form-group">
     <div *ngIf="isLoading">
         <app-loading-spinner></app-loading-spinner>
     </div>
-    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column">
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column" class="form-border">
+        <h1>Create a New Account</h1>
         <mat-form-field appearance="outline">
           <mat-label for="username">Username</mat-label>
           <input matInput type="username" ngModel name="username" required>

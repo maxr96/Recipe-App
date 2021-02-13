@@ -1,8 +1,9 @@
-<div fxLayout="column" fxLayoutAlign="space-around center">
+<div fxLayout="column" fxLayoutAlign="space-around center" class="form-group">
   <div *ngIf="isLoading">
       <app-loading-spinner></app-loading-spinner>
   </div>
-  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column">
+  <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading" fxLayout="column" class="form-border">
+    <h1>Log In to You Account</h1>
       <mat-form-field appearance="outline">
         <mat-label for="username">Username</mat-label>
         <input matInput type="username" id="username" ngModel name="username"
@@ -16,6 +17,12 @@
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
       </mat-form-field>
+      <p>
+        <mat-checkbox>
+          <!--TODO: Add actual functionality to this checkbox--> 
+          <span class="mat-checkbox-text">Stay logged in</span>
+        </mat-checkbox>
+      </p>
       <div fxLayout="row" fxLayout="space-around">
           <button mat-raised-button color="primary" type="submit" [disabled]="authForm.invalid">Login</button>
           <button mat-button color="primary" routerLink="/auth/signup" type="button">Signup</button>

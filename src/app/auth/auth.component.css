@@ -5,3 +5,17 @@ mat-form-field {
 .hide-icon {
     margin-bottom: -5px;
 }
+
+.form-group {
+    height: 100%;
+}
+
+.form-border {
+    border: 2px solid blue;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.mat-checkbox-text {
+    font-weight: 400;
+}

@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoCopyPasteDirective } from './no-copy-paste.directive';
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { NoCopyPasteDirective } from './no-copy-paste.directive';
     FlexLayoutModule,
     MatInputModule,
     MatIconModule,
+    MatCheckboxModule,
     RouterModule.forChild([{
       path: '',
       redirectTo: 'login',
