@@ -15,7 +15,7 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private tokenExpirationTimer: NodeJS.Timeout | undefined;
+  private tokenExpirationTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
