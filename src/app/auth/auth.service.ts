@@ -1,35 +1,34 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import * as fromApp from '../store/app.reducer';
-import { Store } from "@ngrx/store";
+import { Store } from '@ngrx/store';
 import * as AuthActions from './store/auth.actions';
 
 export interface AuthResponseData {
-    kind: string,
-    idToken: string,
-    email: string,
-    refreshToken: string;
-    expiresIn: string;
-    localId: string;
-    registered?: boolean;
+  kind: string;
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  expiresIn: string;
+  localId: string;
+  registered?: boolean;
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-    private tokenExpirationTimer;
+  private tokenExpirationTimer: NodeJS.Timeout | undefined;
 
-    constructor( private store: Store<fromApp.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
-    setLogoutTimer(expirationDuration: number) {
-        this.tokenExpirationTimer = setTimeout(() => {
-            this.store.dispatch(AuthActions.logout());
-        }, expirationDuration)
+  setLogoutTimer(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.store.dispatch(AuthActions.logout());
+    }, expirationDuration);
+  }
+
+  clearLogoutTimer() {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = undefined;
     }
-
-    clearLogoutTimer() {
-        if (this.tokenExpirationTimer) {
-            clearTimeout(this.tokenExpirationTimer);
-            this.tokenExpirationTimer = null;
-        }
-    }
-
+  }
 }

@@ -1,11 +1,10 @@
 import { Directive, HostListener } from '@angular/core';
 
 @Directive({
-  selector: '[no-copy-paste]'
+  selector: '[no-copy-paste]',
 })
 export class NoCopyPasteDirective {
-
-  constructor() { }
+  constructor() {}
 
   @HostListener('paste', ['$event']) noPaste(e: KeyboardEvent) {
     e.preventDefault();
