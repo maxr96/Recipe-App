@@ -10,43 +10,53 @@ import * as ShoppingListActions from '../../shopping-list/store/shopping-list.ac
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.css']
+  styleUrls: ['./recipe-detail.component.css'],
 })
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe | undefined;
   id: number | undefined;
-  constructor(private route: ActivatedRoute,
-    private router: Router, private store: Store<fromApp.AppState>) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<fromApp.AppState>
+  ) {}
 
   ngOnInit() {
-    this.route.params.pipe(map(params => {
-      return +params['id'];
-    }), switchMap(id => {
-      this.id = id;
-      return this.store.select('recipes');
-    }),
-    map(recipesState => {
-      return recipesState.recipes.find((recipe, index) => {
-        return index === this.id;
-      })}
-      )).subscribe(recipe => {
+    this.route.params
+      .pipe(
+        map((params) => {
+          return +params['id'];
+        }),
+        switchMap((id) => {
+          this.id = id;
+          return this.store.select('recipes');
+        }),
+        map((recipesState) => {
+          return recipesState.recipes.find((_recipe, index) => {
+            return index === this.id;
+          });
+        })
+      )
+      .subscribe((recipe) => {
         this.recipe = recipe;
-      })
+      });
   }
 
   onAddToShoppingList() {
-    if(this.recipe?.ingredients !== undefined){
-      this.store.dispatch(ShoppingListActions.addIngredients({ingredients: this.recipe.ingredients}));
+    if (this.recipe?.ingredients !== undefined) {
+      this.store.dispatch(
+        ShoppingListActions.addIngredients({ ingredients: this.recipe.ingredients })
+      );
     }
   }
 
   onEditRecipe() {
-    this.router.navigate(['edit'], {relativeTo: this.route});
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
   onDeleteRecipe() {
-    if(this.id !== undefined){
-      this.store.dispatch(RecipeActions.deleteRecipe({index: this.id}));
+    if (this.id !== undefined) {
+      this.store.dispatch(RecipeActions.deleteRecipe({ index: this.id }));
     }
     this.router.navigate(['/recipes']);
   }
