@@ -18,7 +18,6 @@ import { RecipeEffects } from './recipes/store/recipe.effects';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -27,13 +26,8 @@ import { MatListModule } from '@angular/material/list';
 import { SidenavComponent } from './sidenav/sidenav.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    SidenavComponent
-  ],
+  declarations: [AppComponent, HeaderComponent, SidenavComponent],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     HttpClientModule,
     ShoppingListModule,
@@ -42,16 +36,15 @@ import { SidenavComponent } from './sidenav/sidenav.component';
     AuthModule,
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([AuthEffects, RecipeEffects]),
-    StoreDevtoolsModule.instrument({logOnly: environment.production}),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     BrowserAnimationsModule,
-    MatTabsModule,
     MatSidenavModule,
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
-    MatListModule
+    MatListModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
