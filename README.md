@@ -14,6 +14,7 @@ This is a personal project created for learning purposes. Here I build an Angula
 - [x] Prettier and ESLint for code linting and automatic code formatting.
 - [ ] SASS (planned for later)
 - [ ] Rich Editor library for creating new recipes
+- [x] Azure Static Web App deployed at https://www.bestrecipes.live/.
 
 ## Main features
 
