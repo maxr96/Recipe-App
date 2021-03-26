@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatChipsModule } from '@angular/material/chips';
+import { DurationPipe } from './duration.pipe';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     RecipeItemComponent,
     RecipeStartComponent,
     RecipeEditComponent,
+    DurationPipe,
   ],
   imports: [
     RecipesRoutingModule,
@@ -32,6 +35,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatChipsModule,
   ],
 })
 export class RecipesModule {}

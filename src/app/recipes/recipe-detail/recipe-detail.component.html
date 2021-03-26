@@ -1,33 +1,37 @@
-<div *ngIf="recipe && recipe.imagePath && recipe.title">
-  <img [src]="recipe.imagePath" alt="{{ recipe.title }}" style="max-height: 300px" />
-</div>
-<div *ngIf="recipe && recipe.title">
-  <h1>{{ recipe.title }}</h1>
-</div>
+<div *ngIf="recipe" fxLayout="column wrap" fxLayoutGap="10px" fxLayoutAlign="center center">
+  <div *ngIf="recipe.imagePath && recipe.title" fxLayout="row" fxLayoutAlign="center center">
+    <img fxFlex="80%" fxFlexAlign="center" [src]="recipe.imagePath" alt="{{ recipe.title }}" />
+  </div>
+  <div *ngIf="recipe.title">
+    <h1>{{ recipe.title }}</h1>
+  </div>
 
-<div fxLayout="row wrap" fxLayoutGap="20px">
-  <button (click)="onAddToShoppingList()" mat-raised-button color="primary">
-    To Shopping List
-  </button>
-  <button (click)="onEditRecipe()" mat-raised-button color="accent">Edit Recipe</button>
-  <button mat-raised-button color="warn" (click)="onDeleteRecipe()">Delete Recipe</button>
+  <div fxLayout="row wrap" fxLayoutGap="20px">
+    <button (click)="onAddToShoppingList()" mat-raised-button color="primary">
+      To Shopping List
+    </button>
+    <button (click)="onEditRecipe()" mat-raised-button color="accent">Edit Recipe</button>
+    <button mat-raised-button color="warn" (click)="onDeleteRecipe()">Delete Recipe</button>
+  </div>
+  <div *ngIf="recipe.description">
+    {{ recipe.description }}
+  </div>
+  <div *ngIf="recipe.cuisine">Cuisine: {{ recipe.cuisine }}</div>
+  <div *ngIf="recipe.time">
+    {{ recipe.time | duration }}
+  </div>
+  <div *ngIf="recipe.instructions">
+    {{ recipe.instructions }}
+  </div>
+  <div *ngIf="recipe.category">
+    <mat-chip-list>
+      <mat-chip color="primary">{{ recipe.category }}</mat-chip>
+    </mat-chip-list>
+  </div>
+  <ul *ngIf="recipe.ingredients">
+    <li *ngFor="let ingredient of recipe.ingredients">
+      {{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}
+    </li>
+  </ul>
+  <div *ngIf="recipe.author" class="author" fxFlexAlign="end">Created by: {{ recipe.author }}</div>
 </div>
-<div *ngIf="recipe && recipe.description">
-  {{ recipe.description }}
-</div>
-<div *ngIf="recipe && recipe.cuisine">Cuisine: {{ recipe.cuisine }}</div>
-<div *ngIf="recipe && recipe.time">
-  {{ recipe.time }}
-</div>
-<div *ngIf="recipe && recipe.instructions">
-  {{ recipe.instructions }}
-</div>
-<div *ngIf="recipe && recipe.author">
-  {{ recipe.author }}
-</div>
-<div *ngIf="recipe && recipe.category">Category: {{ recipe.category }}</div>
-<ul *ngIf="recipe && recipe.ingredients">
-  <li *ngFor="let ingredient of recipe.ingredients">
-    {{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}
-  </li>
-</ul>
