@@ -88,7 +88,7 @@ export class AuthEffects {
       switchMap((authData) => {
         return this.http
           .post(
-            environment.serverUrl + '/login',
+            `${environment.serverUrl}/login`,
             {
               username: authData.username,
               password: authData.password,

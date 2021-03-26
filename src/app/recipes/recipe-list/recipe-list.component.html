@@ -1,11 +1,15 @@
-<div class="row">
-    <div class="col-xs-12">
-        <button mat-raised-button color="primary" (click)="onNewRecipe()">New Recipe</button>
-    </div>
-</div>
-<hr>
-<div fxLayout="row wrap" fxLayoutGap="20px grid">
-    <app-recipe-item fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" fxFlex.lg="20%" *ngFor="let recipe of recipes; let i = index"
+<button mat-raised-button color="primary" (click)="onNewRecipe()" class="new-recipe-button">
+  New Recipe
+</button>
+<div fxLayout="row wrap" fxLayoutGap="20px grid" class="recipes-list">
+  <app-recipe-item
+    fxFlex="25%"
+    fxFlex.xs="100%"
+    fxFlex.sm="33%"
+    fxFlex.lg="20%"
+    *ngFor="let recipe of recipes; let i = index"
     [recipe]="recipe"
-    [index]="i"></app-recipe-item>
+    [index]="i"
+    class="recipe-item"
+  ></app-recipe-item>
 </div>
