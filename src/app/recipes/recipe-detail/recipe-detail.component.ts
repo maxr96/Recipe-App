@@ -39,6 +39,7 @@ export class RecipeDetailComponent implements OnInit {
       )
       .subscribe((recipe) => {
         this.recipe = recipe;
+        console.log(recipe);
       });
   }
 
