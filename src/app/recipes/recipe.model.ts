@@ -13,6 +13,7 @@ export class Recipe {
     public instructions: string,
     public imagePath: string,
     public cuisine: string,
+    public tags: string[],
     public ingredients: Ingredient[]
   ) {
     this.title = title;

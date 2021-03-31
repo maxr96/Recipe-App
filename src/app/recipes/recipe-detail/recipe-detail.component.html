@@ -17,6 +17,11 @@
     {{ recipe.description }}
   </div>
   <div *ngIf="recipe.cuisine">Cuisine: {{ recipe.cuisine }}</div>
+  <div *ngIf="recipe.tags">
+    <mat-chip-list>
+      <mat-chip color="primary" *ngFor="let tag of recipe.tags">{{ tag }}</mat-chip>
+    </mat-chip-list>
+  </div>
   <div *ngIf="recipe.time">
     {{ recipe.time | duration }}
   </div>
