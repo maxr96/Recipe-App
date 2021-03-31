@@ -19,7 +19,6 @@
             "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -71,7 +70,6 @@
             "scripts": [],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "assets": ["src/assets", "src/favicon.ico"]
