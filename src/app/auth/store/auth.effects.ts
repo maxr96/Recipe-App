@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -59,27 +59,30 @@ const handleError = (errorRes: HttpErrorResponse) => {
 
 @Injectable()
 export class AuthEffects {
-  @Effect()
-  authSignup = this.actions$.pipe(
-    ofType(AuthActions.signupStart),
-    switchMap((signupAction) => {
-      return this.http
-        .post<any>(environment.serverUrl + '/sign-up', {
-          username: signupAction.username,
-          email: signupAction.email,
-          password: signupAction.password,
+  authSignup = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.signupStart),
+        switchMap((signupAction) => {
+          return this.http
+            .post<any>(environment.serverUrl + '/sign-up', {
+              username: signupAction.username,
+              email: signupAction.email,
+              password: signupAction.password,
+            })
+            .pipe(
+              catchError((errorRes) => handleError(errorRes)),
+              map((res: HttpResponse<AuthResponseData>) => {
+                if (res.status === 201) {
+                  this.router.navigate(['/auth', 'login']);
+                  return AuthActions.signupSuccess();
+                }
+                return res.body;
+              })
+            );
         })
-        .pipe(
-          catchError((errorRes) => handleError(errorRes)),
-          map((res: HttpResponse<AuthResponseData>) => {
-            if (res.status === 201) {
-              this.router.navigate(['/auth', 'login']);
-              return AuthActions.signupSuccess();
-            }
-            return res.body;
-          })
-        );
-    })
+      ),
+    { dispatch: false }
   );
 
   authLogin = createEffect(() =>

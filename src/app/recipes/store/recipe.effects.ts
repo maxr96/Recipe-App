@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Recipe } from '../recipe.model';
 import * as RecipesActions from './recipe.actions';
@@ -44,11 +44,14 @@ export class RecipeEffects {
     { dispatch: false }
   );
 
-  @Effect()
-  postRecipe = this.actions$.pipe(
-    ofType(RecipesActions.postRecipe),
-    switchMap((action) => {
-      return this.http.post<Recipe>(environment.serverUrl + '/recipes', action.recipe);
-    })
+  postRecipe = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(RecipesActions.postRecipe),
+        switchMap((action) => {
+          return this.http.post<Recipe>(environment.serverUrl + '/recipes', action.recipe);
+        })
+      ),
+    { dispatch: false }
   );
 }
