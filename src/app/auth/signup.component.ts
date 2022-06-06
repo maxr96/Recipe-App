@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, NgForm } from '@angular/forms';
+import { UntypedFormGroup, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
@@ -77,7 +77,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.resetForm(form.form);
   }
 
-  resetForm(form: FormGroup) {
+  resetForm(form: UntypedFormGroup) {
     form.get('password')?.reset();
     form.get('password2')?.reset();
   }
